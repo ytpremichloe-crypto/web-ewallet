@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>E-Wallet</title>
+</head>
+<body>
+  <h1>E-Wallet Simulator</h1>
+  <h2 id="saldo">Saldo: ...</h2>
+
+  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCgeVvyiNZcnaUQKRBEMTYVE51gzxjjMh8",
+  authDomain: "universe-simulator-6142c.firebaseapp.com",
+  projectId: "universe-simulator-6142c",
+  storageBucket: "universe-simulator-6142c.firebasestorage.app",
+  messagingSenderId: "1058326316972",
+  appId: "1:1058326316972:web:d51035840346a659e35c09"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+signInAnonymously(auth).then(async (userCredential) => {
+  const userId = userCredential.user.uid;
+
+  const userRef = doc(db, "users", userId);
+  const userSnap = await getDoc(userRef);
+
+  if (userSnap.exists()) {
+    document.getElementById("saldo").innerText =
+      "Saldo: " + userSnap.data().saldo;
+  } else {
+      document.getElementById("saldo").innerText =
+      "Saldo: 0";
+  }
+});
+</script>
+</body>
+</html>
